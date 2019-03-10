@@ -1,6 +1,6 @@
 #BUILDS qlustor/alpine-go_runit
 
-FROM qlustor/alpine-runit:3.8
+FROM qlustor/alpine-runit:3.9
 MAINTAINER Team QLUSTOR <team@qlustor.com>
 
 RUN apk-install --update ca-certificates && update-ca-certificates
@@ -10,7 +10,7 @@ RUN apk-install --update ca-certificates && update-ca-certificates
 # - docker run --rm debian:stretch grep '^hosts:' /etc/nsswitch.conf
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
-ENV GOLANG_VERSION 1.11.5
+ENV GOLANG_VERSION 1.12
 
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
@@ -40,7 +40,7 @@ RUN set -eux; \
 	esac; \
 	\
 	wget -O go.tgz "https://golang.org/dl/go$GOLANG_VERSION.src.tar.gz"; \
-	echo 'bc1ef02bb1668835db1390a2e478dcbccb5dd16911691af9d75184bbe5aa943e *go.tgz' | sha256sum -c -; \
+	echo '09c43d3336743866f2985f566db0520b36f4992aea2b4b2fd9f52f17049e88f2 *go.tgz' | sha256sum -c -; \
 	tar -C /usr/local -xzf go.tgz; \
 	rm go.tgz; \
 	\
