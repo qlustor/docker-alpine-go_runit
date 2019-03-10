@@ -1,7 +1,9 @@
-FROM alpine:3.8
+#BUILDS qlustor/alpine-go_runit
 
-RUN apk add --no-cache \
-		ca-certificates
+FROM qlustor/alpine-runit:3.8
+MAINTAINER Team QLUSTOR <team@qlustor.com>
+
+RUN apk-install --update ca-certificates && update-ca-certificates
 
 # set up nsswitch.conf for Go's "netgo" implementation
 # - https://github.com/golang/go/blob/go1.9.1/src/net/conf.go#L194-L275
@@ -12,6 +14,7 @@ ENV GOLANG_VERSION 1.11.5
 
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
+		wget \
 		bash \
 		gcc \
 		musl-dev \
@@ -61,3 +64,5 @@ ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 WORKDIR $GOPATH
+
+ENTRYPOINT ["/sbin/runit-docker"]
